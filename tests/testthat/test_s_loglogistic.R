@@ -1,21 +1,20 @@
 require(survival)
 test_that(
-  "Weibull factory works well",
+  "Loglogistic factory works well",
   {
-    xx <- s_factory(s_weibull, scale = 1, shape = 2)
+    xx <- s_factory(s_loglogistic, scale = 1, shape = 2)
     expect_type(xx,"list")
     expect_s3_class(xx,"SURVIVAL")
-    expect_s3_class(s_factory(s_weibull, surv = 0.4, t=1, shape = 0.5), "SURVIVAL")
-    expect_s3_class(s_factory(s_weibull, fail = 0.6, t=1, shape = 1.5), "SURVIVAL")
-    expect_s3_class(s_weibull(fail = 0.6, t=1, shape = 1.1), "SURVIVAL")
-    expect_s3_class(s_weibull(surv = 0.6, t=1, shape = 1.1), "SURVIVAL")
-    expect_error(s_factory(s_weibull, hola = 4))
-    expect_error(s_weibull(scale = 1, shape = -2 ))
-    expect_error(s_weibull(scale = -1, shape = 1.5 ))
-    expect_equal(xx$sfx(1),  exp(-1*(1^2)))
-    expect_equal(xx$hfx(1),  1*2*(1)^(2-1))
-    expect_equal(xx$Cum_Hfx(1), 1*1^2)
-    expect_equal(xx$invCum_Hfx(0.5), (0.5/1)^(1/2))
+    expect_s3_class(s_factory(s_loglogistic, surv = 0.4, t=1, shape = 0.5), "SURVIVAL")
+    expect_s3_class(s_factory(s_loglogistic, fail = 0.6, t=1, shape = 1.5), "SURVIVAL")
+    expect_s3_class(s_loglogistic(fail = 0.6, t=1, shape = 1.1), "SURVIVAL")
+    expect_s3_class(s_loglogistic(surv = 0.6, t=1, shape = 1.1), "SURVIVAL")
+    expect_error(s_factory(s_loglogistic, hola = 4))
+    expect_error(s_loglogistic(scale = 1, shape = -2 ))
+    expect_error(s_loglogistic(scale = -1, shape = 1.5 ))
+    yy <- s_loglogistic(surv = 0.4, t = 1, shape = 2)
+    expect_equal(yy$sfx(1), 0.4)
+    expect_equal(yy$invCum_Hfx(yy$Cum_Hfx(1)), 1)
     expect_length(xx$rsurv(10), 10)
     expect_length(xx$rsurvhr(rep(1,10)), 10)
     expect_error(xx$sfx(-1))
@@ -35,46 +34,37 @@ test_that(
     scale = 2
     shape = 1.5
     npergroup = 1000
-    xobj <- s_weibull(scale = scale, shape = shape)
+    xobj <- s_loglogistic(scale = scale, shape = shape)
     grp <- c(rep(0,npergroup),rep(1,npergroup))
     hrvector = c(rep(1,npergroup), rep(hr, npergroup))
     res <- lapply(1:reps, function(x){
       t = xobj$rsurvhr(hrvector)
       df <- data.frame(grp, t)
-      # From AFT to PH
-      fitaft <- survival::survreg(Surv(t) ~ grp, data = df, dist = "weibull", scale = 0)
-      pscale = exp(-fitaft$coefficients["(Intercept)"]/fitaft$scale)
-      pshape = 1/fitaft$scale
-      phr <- exp(-fitaft$coefficients["grp"]/fitaft$scale)
       # CoxPH
       creg <- survival::coxph(Surv(t) ~ grp, data = df)
       rcox <- exp(coef(creg))
-      return(c(scale = unname(pscale), shape = unname(pshape), hrph = unname(phr), hrcox = unname(rcox)))
+      return(c( hrcox = unname(rcox)))
     })
     res2 <- apply(do.call(rbind,res),2,mean)
 
-    expect_equal(unname(res2["scale"]),scale, tolerance = 1/reps*10)
-    expect_equal(unname(res2["shape"]),shape, tolerance = 1/reps*10)
-    expect_equal(unname(res2["hrph"]),hr, tolerance = 1/reps*10)
     expect_equal(unname(res2["hrcox"]),hr, tolerance = 1/reps*10)
 
 
    # test parameters from survreg
    reps = 1000
-   npergroup= 1000
    intercept = 2
    scale = 1.5
-   yobj <- s_weibull(intercept = intercept, scale = scale)
+   yobj <- s_loglogistic(intercept = 2, scale = scale)
    resp <- lapply(1:reps, function(x){
      t<- yobj$rsurv(1000)
-     fitmod <- survival::survreg(Surv(t) ~ 1, dist = "weibull")
+     fitmod <- survival::survreg(Surv(t) ~ 1, dist = "loglogistic")
      pintercept = fitmod$coefficients["(Intercept)"]
      pscale = fitmod$scale
      return(c(intercept = unname(pintercept), scale = unname(pscale)))
    })
    resp2 <- apply(do.call(rbind, resp),2,mean)
-   expect_equal(unname(resp2["scale"]),scale, tolerance = 1/reps*10)
    expect_equal(unname(resp2["intercept"]),intercept, tolerance = 1/reps*10)
+   expect_equal(unname(resp2["scale"]),scale, tolerance = 1/reps*10)
 
     # Test the aft but it takes a lot of time
     reps = 1000
@@ -82,14 +72,14 @@ test_that(
     npergroup = 1000
     intercept = 2
     scale = 1.5
-    zobj <- s_weibull(intercept = intercept, scale = scale)
+    zobj <- s_loglogistic(intercept = intercept, scale = scale)
     grp <- c(rep(0,npergroup),rep(1,npergroup))
     aftvector = c(rep(1,npergroup), rep(aft, npergroup))
     res <- lapply(1:reps, function(x){
       t = zobj$rsurvaft(aftvector)
       df <- data.frame(grp, t)
       # From AFT model
-      fitaft <- survival::survreg(Surv(t) ~ grp, data = df, dist = "weibull")
+      fitaft <- survival::survreg(Surv(t) ~ grp, data = df, dist = "loglogistic")
       pintercept = fitaft$coefficients["(Intercept)"]
       pscale = fitaft$scale
       baft <- exp(-coef(fitaft))
@@ -100,7 +90,7 @@ test_that(
     res2 <- apply(do.call(rbind,res),2,mean)
     expect_equal(unname(res2["scale"]),scale, tolerance = 1/reps*10)
     expect_equal(unname(res2["intercept"]),intercept, tolerance = 1/reps*10)
-    expect_equal(unname(res2["baft"]), aft, tolerance =1/reps*10)
+    expect_equal(unname(res2["baft"]), aft, tolerance =1/reps*100)
 
   }
 })

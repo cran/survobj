@@ -25,7 +25,7 @@
 #' The parameters should be spell correctly as partial matching is not available
 #'
 #' @param ... Parameters to define the distribution. See the Parameters for details
-#' @return a SURVIVAL object of the exponential distribution family. See the
+#' @return a SURVIVAL object of the Weibull distribution family. See the
 #' documentation of `s_factory` for the methods available for SURVIVAL objects
 #' @export
 #' @importFrom stats runif
@@ -66,10 +66,25 @@ s_weibull <- function(...) {
           iCum_Hfx(-log(runif(n)))
         },
         rsurvhr = function(hr){
-          stopifnot("Must be positive numbers > 0" = all(hr > 0))
+          stopifnot("hr must be numeric" = is.numeric(hr))
+          stopifnot("hr must be positive numbers > 0" = all(hr > 0))
           # Following Bender, Augustin and Blettner 2005
           iCum_Hfx(-log(runif(length(hr)))/hr)
+        },
+        rsurvaft = function(aft){
+          stopifnot("aft must be numeric" = is.numeric(aft))
+          stopifnot("aft must be positive numbers > 0" = all(aft > 0))
+          iCum_Hfx(-log(runif(length(aft))))/aft
+        },
+        rsurvah = function(aft,hr){
+          stopifnot("aft must be numeric" = is.numeric(aft))
+          stopifnot("hr must be numeric" = is.numeric(hr))
+          stopifnot("aft and hr must be of the same length" = length(aft)==length(hr) )
+          stopifnot("aft must be positive numbers > 0" = all(aft > 0))
+          stopifnot("hr must be positive numbers > 0" = all(hr > 0))
+          iCum_Hfx(-log(runif(length(aft)))/hr)/aft
         }
+
       ),
       class = c("SURVIVAL")
     )
@@ -136,4 +151,4 @@ s_weibull <- function(...) {
     "fail, t and shape: for the failure proportion (events) at time t and shape, or\n",
     "intercept and scale: for values from a survreg regression\n")
   stop("Not valid parameters")
-  }
+}

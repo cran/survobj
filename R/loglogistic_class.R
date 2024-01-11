@@ -1,67 +1,60 @@
-## Gompertz survival objects for simulations
-## by JJAV 20231128
+## Log Logisitic survival objects for simulations
+# by JJAV 20221204
 
-
-#' Factory of SURVIVAL objects with Gompertz distributions
+#' Factory of SURVIVAL objects with Log Logistic distributions
 #'
-#' Creates a SURVIVAL object with an Gompertz distribution.
+#' Creates a SURVIVAL object with a Log Logistic distribution.
 #'
 #' @section Parameters:
 #'
 #' To create an exponential survival object the following
 #' options are available:
 #'
-#' _`scale`_ and _`shape`_ to specify the canonical parameter of the distribution, or
+#' _`scale`_ and _`shape`_ to specify the canonical parameters of the distribution, or
 #'
-#' _`surv`_, _`t`_ and _`shape`_  for the proportion surviving (no events) at time t and shape, or
+#' _`surv`_, _`t`_ and _`shape`_ for the proportion surviving (no events) at time t and the shape parameter, or
 #'
-#' _`fail`_ and _`t`_ and _`shape`_ for the proportion failing (events) at time t and shape.
+#' _`fail`_, _`t`_ and _`shape`_ for the proportion failing (events) at time t and the shape parameter or
 #'
-#' scale = -log(surv)·shape/(exp(shape·t))
-#'
-#' scale = -log(1-fail)·shape/(exp(shape·t))
+#' _`intercept`_ and _`scale`_ for the parameters returned by `survreg(.., dist = "loglogistic")` models.
 #'
 #' The parameters should be spell correctly as partial matching is not available
 #'
 #' @param ... Parameters to define the distribution. See the Parameters for details
-#' @return a SURVIVAL object of the Gompertz distribution family. See the
+#' @return a SURVIVAL object of the log-logistic distribution family. See the
 #' documentation of `s_factory` for the methods available for SURVIVAL objects
 #' @export
 #' @importFrom stats runif
 #' @examples
-#' s_gompertz(scale = 1, shape = 1.5)
-#' s_gompertz(surv = 0.4, t = 2, shape = 1.5)
-#' s_gompertz(fail = 0.6, t = 2, shape = 1.5)
-
-s_gompertz <- function(...) {
+#' s_loglogistic(scale = 2,shape = 2)
+#' s_loglogistic(surv = 0.6, t= 12, shape = 0.5)
+#' s_loglogistic(fail = 0.4, t = 12, shape =0.5)
+#' s_loglogistic(intercept = 0.4, scale = 0.5)
+s_loglogistic <- function(...) {
   params <- list(...)
   nparam <- names(params)
 
   # This function is the factory of the class
-  .factory_gompertz <- function(scale, shape) {
+  .factory_loglogistic <- function(scale, shape) {
     iCum_Hfx <- function(H){
       stopifnot("Must be positive number" = all(H >= 0))
-      1/shape*log(shape/scale*H+1)
-      #log(shape/scale*H+1)/shape
+      ((exp(H)-1)^(1/shape))/scale
     }
     structure(
       list(
-        distribution = "GOMPERTZ",
+        distribution = "LOGLOGISTIC",
         params = list(scale = scale, shape = shape),
         sfx = function(t) {
           stopifnot("Must be positive number" = all(t >= 0))
-          exp(scale/shape*(1-exp(shape*t)))
-          #exp(-scale/shape*(exp(shape*t)-1))
-          },
+          1/(1+(t*scale)^shape)
+        },
         hfx = function(t) {
           stopifnot("Must be positive number" = all(t >= 0))
-          scale*exp(shape*t)
-          #scale*exp(shape*t)
-          },
+          scale*shape*(scale*t)^(shape -1)/(1+(scale*t)^shape)
+        },
         Cum_Hfx = function(t) {
           stopifnot("Must be positive number" = all(t >= 0))
-          scale/shape*(exp(shape*t)-1)
-#          scale/shape*(exp(shape*t)-1)
+          log(1+(t*scale)^shape)
         },
         invCum_Hfx=iCum_Hfx,
         rsurv =  function(n){
@@ -98,9 +91,9 @@ s_gompertz <- function(...) {
     stopifnot("scale should be a single number" = is_single_number(params$scale))
     stopifnot("scale must be greater than 0" = params$scale > 0)
     stopifnot("shape should be a single number" = is_single_number(params$shape))
-    stopifnot("shape can't be 0 " = params$shape != 0)
+    stopifnot("shape must be greater than 0 " = params$shape > 0)
 
-    return(.factory_gompertz(params$scale, params$shape))
+    return(.factory_loglogistic(params$scale, params$shape))
   }
 
   # Definition based in proportion surviving, time and shape
@@ -113,9 +106,10 @@ s_gompertz <- function(...) {
     stopifnot("t must be a single number" = is_single_number(params$t))
     stopifnot("t must be greater than 0" = params$t > 0)
     stopifnot("shape should be a single number" = is_single_number(params$shape))
-    stopifnot("shape can't be 0 " = params$shape != 0)
-    scale = -log(params$surv)*params$shape/(exp(params$shape*params$t)-1)
-    return(.factory_gompertz(scale, params$shape))
+    stopifnot("shape must be greater than 0 " = params$shape > 0)
+
+    scale = ((1 - params$surv) / params$surv)^(1/params$shape) / params$t
+    return(.factory_loglogistic(scale, params$shape))
 
   }
 
@@ -129,16 +123,27 @@ s_gompertz <- function(...) {
     stopifnot("t must be a single number" = is_single_number(params$t))
     stopifnot("t must be greater than 0" = params$t > 0)
     stopifnot("shape should be a single number" = is_single_number(params$shape))
-    stopifnot("shape can't be 0 " = params$shape != 0)
-    scale = -log((1-params$fail))*params$shape/(exp(params$shape*params$t)-1)
-    return(.factory_gompertz(scale, params$shape))
+    stopifnot("shape must be greater than 0 " = params$shape > 0)
+    surv = 1- params$fail
+    scale = ((1 -surv) / surv)^(1/params$shape) / params$t
+    return(.factory_loglogistic(scale, params$shape))
+  }
+
+  if(
+    length(nparam == 2) &
+    all(c("intercept","scale") %in% nparam)) {
+    stopifnot("intercept must be a single number" = is_single_number(params$intercept))
+    stopifnot("scale must be a single number" = is_single_number(params$scale))
+    pscale = 1/exp(params$intercept)
+    pshape = 1/params$scale
+    return(.factory_loglogistic(pscale, pshape))
   }
 
   message(
-    "Valid parameters to define a Gompertz distribution are: \n",
+    "Valid parameters to define a loglogistic distribution are: \n",
     "scale and shape: for the canonical parameters of the distribution, or\n",
     "surv, t and shape: for the surviving proportion (no events) at time t and shape, or\n",
-    "fail, t and shape: for the failure proportion (events) at time t and shape, or \n")
+    "fail, t and shape: for the failure proportion (events) at time t and shape, or\n",
+    "intercept and scale: for values from a survreg regression\n")
   stop("Not valid parameters")
 }
-

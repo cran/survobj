@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -131,6 +131,14 @@ par(mfrow = c(1,1))
 pobj <- s_piecewise(surv = 0.2, breaks = c(1,2,3,Inf), segments = c(1,2,3,1))
 pobj
 pobj$sfx(3)
+plot_survival(pobj, timeto = 3)
+
+## ----loglogistic, fig.height=6, fig.width=7, fig.align='center'---------------
+pobj <- s_loglogistic(scale = 3, shape = 1.5)
+plot_survival(pobj, timeto = 3)
+
+## ----lognormal, fig.height=6, fig.width=7, fig.align='center'-----------------
+pobj <- s_lognormal(scale = 1.5, shape = 0.8)
 plot_survival(pobj, timeto = 3)
 
 ## ----compare, fig.height=6, fig.width=7, fig.align='center'-------------------
