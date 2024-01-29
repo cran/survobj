@@ -1,6 +1,8 @@
-# survobj
 
 # News
+# survobj 3.0.0
+Addition of recurrent event simulaion under homogeneous and non homogeneous
+Poisson process
 
 # survobj 2.0.0
 Addition of new distributions and new random generators functions
