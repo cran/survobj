@@ -1,6 +1,6 @@
 Package: survobj
 Title: Objects to Simulate Survival Times
-Version: 3.0.0
+Version: 3.1.0
 Authors@R: person(
     "Aponte", 
     "John", 
@@ -21,8 +21,8 @@ URL: https://johnaponte.github.io/survobj/,
         https://github.com/johnaponte/survobj
 BugReports: https://github.com/johnaponte/survobj/issues
 NeedsCompilation: no
-Packaged: 2024-01-29 19:37:04 UTC; master
+Packaged: 2024-05-05 10:45:05 UTC; master
 Author: Aponte John [aut, cre, cph] (<https://orcid.org/0000-0002-3014-3673>)
 Maintainer: Aponte John <john.j.aponte@gmail.com>
 Repository: CRAN
-Date/Publication: 2024-01-29 19:50:02 UTC
+Date/Publication: 2024-05-05 11:00:02 UTC

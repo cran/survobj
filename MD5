@@ -1,6 +1,6 @@
-16d37d874d1aeafff0f36ac0ad7b5b88 *DESCRIPTION
+cb99a2531098b30461cda27b07086b3c *DESCRIPTION
 b1b1804dae9236e8fb42e2a220a542c0 *NAMESPACE
-4d039231af7a5ffd4e73207f8d7f7f3f *NEWS.md
+c6c9929b12a1bfa12d2ccba2302e21d0 *NEWS.md
 1f547b906175ccbf70328d3e066ae6f1 *R/exponential_class.R
 1bbb49c4a6e414cdc75c8a4028eb693c *R/gompertz_class.R
 3a59af0830c18f84745bd40ab0af254c *R/loglogistic_class.R
@@ -11,15 +11,15 @@ c6c741a9b7a447d0e8871b7e7433842c *R/lognormal_class.R
 2dddb151a2f7f8c9ef999697e226ec0b *R/survobj-package.R
 7d9dc02578da36787cb0fdf30a750844 *R/utils.R
 700411c89acf0d4fdb7a0b0057b8d04c *R/weibull_class.R
-2210ed3d0f6bd4662739f530481ce17d *README.md
-861ec83789be023a16f0d5e7135b15c1 *build/vignette.rds
+634973e5983da16df1c4e0aff7319e0a *README.md
+f86a59b3c3ed87f2df4596cbad81619d *build/vignette.rds
 dfdfcc7410f8f9422ec15fee99df33be *inst/WORDLIST
 8624791ba9f8735819f6d230e1ae9109 *inst/doc/example_distributions.R
 467b9ac76b165b05b6ce9742baa25517 *inst/doc/example_distributions.Rmd
-d0cc6b8df371e4d63c5a504fbda1cfe9 *inst/doc/example_distributions.html
+f0a4139c968bdb2fb0bc35e1f375ea5f *inst/doc/example_distributions.html
 4609be321f5c6b6edf1f985985f93c78 *inst/doc/simulation_distributions.R
 436b2b9fd0277b28d6f5628ad662afc0 *inst/doc/simulation_distributions.Rmd
-6365a6d6ef0348ce2095bee0918f85f6 *inst/doc/simulation_distributions.html
+ff958df061f104f72742b540131bacfb *inst/doc/simulation_distributions.html
 30b3f0474080159ddf071d82eb9b4fb9 *inst/doc/simulation_recurent.R
 845259f81062174da28fd7c7f4e3136b *inst/doc/simulation_recurent.Rmd
 180367a7626994b43e2fb770a81d9fc7 *inst/doc/simulation_recurent.html
@@ -31,6 +31,7 @@ d0cc6b8df371e4d63c5a504fbda1cfe9 *inst/doc/example_distributions.html
 c4a5ec6bb0e4e52a2ef769df50b44e6a *inst/doc/simulation_trials2.html
 ecea992f4970275a5e4f80a5f7ebc093 *man/SURVIVAL.Rd
 605265dfe4316044ce331bb2e974900d *man/censor_event.Rd
+1f6e0f4efaa009a69ac8aa33ed7e59df *man/figures/logo.png
 a63890ab9cce644b024d7fc765ad7c7d *man/fx_h_time.Rd
 6f8bdc0471e27aee7164421a367d0e9c *man/is_single_number.Rd
 1f300cb6c60018fc18236e7968e3bdae *man/nhpp.Rd
