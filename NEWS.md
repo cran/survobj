@@ -1,4 +1,8 @@
 # News
+# survobj 3.1.1
+Fix graph after simulation to start in survival 1 at time 0 and cumulative 
+risk 0 at time 0
+
 ## survobj 3.1.0
 Add logo
 

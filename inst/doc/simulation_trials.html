@@ -50,7 +50,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -435,21 +435,21 @@ total number of events and the estimated vaccine efficacy</p></li>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>empirical_power <span class="ot">=</span> <span class="fu">binom.test</span>(<span class="fu">sum</span>(sim_df<span class="sc">$</span>pval <span class="sc">&lt;=</span> <span class="fl">0.05</span>), <span class="fu">length</span>(sim_df<span class="sc">$</span>pval))</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>empirical_power<span class="sc">$</span>estimate</span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; probability of success </span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;                  0.902</span></span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>empirical_power<span class="sc">$</span>conf.int</span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; [1] 0.8818715 0.9197225</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;conf.level&quot;)</span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; [1] 0.95</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co"># Distribution of the simulated VEs}</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="fu">summary</span>(sim_df<span class="sc">$</span>ve)</span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;    2.22   33.37   40.06   39.33   46.16   68.22</span></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a></span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co"># Distribution of the simulated number of events</span></span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="fu">summary</span>(sim_df<span class="sc">$</span>nevents)</span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt;   134.0   159.0   166.0   166.5   174.0   206.0</span></span></code></pre></div>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;                  0.902</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>empirical_power<span class="sc">$</span>conf.int</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.8818715 0.9197225</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; attr(,&quot;conf.level&quot;)</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.95</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co"># Distribution of the simulated VEs}</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">summary</span>(sim_df<span class="sc">$</span>ve)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt;    2.22   33.37   40.06   39.33   46.16   68.22</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co"># Distribution of the simulated number of events</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">summary</span>(sim_df<span class="sc">$</span>nevents)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;   134.0   159.0   166.0   166.5   174.0   206.0</span></span></code></pre></div>
 </div>
 <div id="conclusion" class="section level2">
 <h2>Conclusion</h2>
